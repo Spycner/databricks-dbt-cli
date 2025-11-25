@@ -3,6 +3,7 @@ name = "databricks-dbt-cli"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
+license = "MIT"
 authors = [
     { name = "Kraus, Pascal", email = "pascal.kraus@outlook.com" }
 ]
@@ -17,7 +18,10 @@ build-backend = "hatchling.build"
 
 [dependency-groups]
 dev = [
+    "poethepoet>=0.38.0",
+    "pre-commit>=4.5.0",
     "pytest>=9.0.1",
+    "pytest-cov>=7.0.0",
     "ruff>=0.14.6",
     "ty>=0.0.1a27",
 ]
@@ -89,3 +93,14 @@ include = ["test/**"]
 
 [tool.ty.overrides.rules]
 possibly-unresolved-reference = "ignore"
+
+[tool.coverage.run]
+source = ["src"]
+branch = true
+
+[tool.poe.tasks]
+lint = "ruff check ."
+format = "ruff format ."
+typecheck = "ty check"
+test = "pytest"
+check = ["lint", "typecheck"]
