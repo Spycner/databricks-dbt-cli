@@ -1,0 +1,91 @@
+[project]
+name = "databricks-dbt-cli"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Kraus, Pascal", email = "pascal.kraus@outlook.com" }
+]
+requires-python = ">=3.10"
+dependencies = [
+    "typer>=0.20.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.1",
+    "ruff>=0.14.6",
+    "ty>=0.0.1a27",
+]
+
+[tool.ruff]
+target-version = "py310"
+exclude = [
+    ".git",
+    "dist",
+]
+
+line-length = 120
+indent-width = 4
+
+[tool.ruff.lint]
+select = [
+    "E", # PEP8 code-style
+    "N", # naming conventions
+    "F", # pyflakes
+    "I", # isort
+    "B", # bugbear
+    "S", # security issues
+    "UP", # pyupgrade
+    "C90", # function complexity check
+    "PTH", # pythlib nagger
+    "SIM", # simplifications
+    "D", # pydocstyle
+    "PT", # pytest pyflakes
+    "ANN", # enforce type hints
+    "RUF", # ruff rules
+    "T20", # flag prints
+    "C4", # comprehensions
+    "W", # pycodestyle warnings
+]
+ignore = [
+    "E501"
+]
+
+fixable = ["ALL"]
+unfixable = ["B"]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["E402"]
+"test/*" = ["S101", "ANN", "D"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.isort]
+known-first-party = ["databricks_dbt_cli"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "auto"
+docstring-code-format = true
+docstring-code-line-length = "dynamic"
+skip-magic-trailing-comma = false
+
+[tool.ty.environment]
+root = ["./src"]
+python-version = "3.10"
+
+[tool.ty.src]
+exclude = [".git", "dist"]
+
+[[tool.ty.overrides]]
+include = ["test/**"]
+
+[tool.ty.overrides.rules]
+possibly-unresolved-reference = "ignore"
