@@ -1,3 +1,27 @@
+# Virtual environments
 .venv
+
+# Build
 dist
 *.typed
+
+# Python
+__pycache__
+*.pyc
+*.pyo
+*.egg-info
+
+# Testing
+.pytest_cache
+.coverage
+coverage.xml
+htmlcov
+
+# Tools
+.ruff_cache
+.ty_cache
+
+# IDE
+.idea
+.vscode
+*.swp
