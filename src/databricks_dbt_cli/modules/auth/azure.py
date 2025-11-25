@@ -13,7 +13,7 @@ from azure.identity import (
 
 from databricks_dbt_cli.utils.exceptions import AzureAuthError
 
-DATABRICKS_RESOURCE_ID = "2ff814a6-3304-4ab8-85cb-cd0e6f879c1d"  #!TODO: make configurable
+DATABRICKS_RESOURCE_ID = ""  #!TODO: make configurable
 DATABRICKS_SCOPE = f"{DATABRICKS_RESOURCE_ID}/.default"
 
 
