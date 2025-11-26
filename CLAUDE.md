@@ -16,6 +16,8 @@ uv run poe check      # Run lint + typecheck together
 
 Single test: `uv run pytest test/test_file.py::test_name -v`
 
+Run the CLI: `uv run brix --help`
+
 ## Code Style
 
 - Python 3.10+, strict type hints required (ANN rules enforced)
@@ -28,4 +30,13 @@ Single test: `uv run pytest test/test_file.py::test_name -v`
 
 - `src/brix/` - Main package (src-layout)
 - `test/` - Tests (relaxed rules: no type hints, docstrings, or assert warnings required)
-- Uses Typer for CLI interface
+
+## Architecture
+
+**CLI Entry Point** (`main.py`): Typer-based CLI with global callback pattern. Global options (--version, --log-level, --log-path, --log-json) are processed before subcommands. Add new commands via `@app.command()` decorators.
+
+**Logging System** (`utils/logging.py`): Terraform-style logging with environment variables (`BRIX_LOG`, `BRIX_LOG_PATH`, `BRIX_LOG_JSON`) and CLI flag overrides. Uses thread-safe singleton pattern. Call `get_logger()` from any module to access the logger.
+
+**Configuration Pattern**: Uses `pydantic-settings` for env var parsing with `BRIX_` prefix. CLI arguments override environment variables.
+
+**Version Checking** (`version_check.py`): Non-blocking update checker using background threads. Caches results to `~/.cache/brix/` with 24-hour TTL.
