@@ -26,6 +26,6 @@ Single test: `uv run pytest test/test_file.py::test_name -v`
 
 ## Project Structure
 
-- `src/databricks_dbt_cli/` - Main package (src-layout)
+- `src/brix/` - Main package (src-layout)
 - `test/` - Tests (relaxed rules: no type hints, docstrings, or assert warnings required)
 - Uses Typer for CLI interface

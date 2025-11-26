@@ -1,5 +1,5 @@
 [project]
-name = "databricks-dbt-cli"
+name = "brix"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
@@ -11,6 +11,9 @@ requires-python = ">=3.10"
 dependencies = [
     "typer>=0.20.0",
 ]
+
+[project.scripts]
+brix = "brix.main:app"
 
 [build-system]
 requires = ["hatchling"]
@@ -71,7 +74,7 @@ unfixable = ["B"]
 convention = "google"
 
 [tool.ruff.lint.isort]
-known-first-party = ["databricks_dbt_cli"]
+known-first-party = ["brix"]
 
 [tool.ruff.format]
 quote-style = "double"
