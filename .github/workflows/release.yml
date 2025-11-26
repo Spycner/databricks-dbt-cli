@@ -26,7 +26,12 @@ jobs:
       - name: Install dependencies
         run: uv sync --group dev
 
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
       - name: Python Semantic Release
-        uses: python-semantic-release/python-semantic-release@v9.21.1
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: uv run semantic-release version --vcs-release
