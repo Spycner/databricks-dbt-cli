@@ -210,22 +210,26 @@ class TestGetLogger:
         assert logger1 is logger2
 
 
+# Disable Rich/ANSI colors for consistent CI output
+_CLI_ENV = {"NO_COLOR": "1", "TERM": "dumb"}
+
+
 class TestCliIntegration:
-    runner = CliRunner()
+    runner = CliRunner(mix_stderr=False)
 
     def test_log_level_option_shows_in_help(self):
-        result = self.runner.invoke(app, ["--help"])
+        result = self.runner.invoke(app, ["--help"], env=_CLI_ENV)
         assert result.exit_code == 0
         assert "--log-level" in result.output
 
     def test_log_path_option_shows_in_help(self):
-        result = self.runner.invoke(app, ["--help"])
+        result = self.runner.invoke(app, ["--help"], env=_CLI_ENV)
         assert "--log-path" in result.output
 
     def test_log_json_option_shows_in_help(self):
-        result = self.runner.invoke(app, ["--help"])
+        result = self.runner.invoke(app, ["--help"], env=_CLI_ENV)
         assert "--log-json" in result.output
 
     def test_cli_with_log_level(self):
-        result = self.runner.invoke(app, ["--log-level", "DEBUG"])
+        result = self.runner.invoke(app, ["--log-level", "DEBUG"], env=_CLI_ENV)
         assert result.exit_code == 0
