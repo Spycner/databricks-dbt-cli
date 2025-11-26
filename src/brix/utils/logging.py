@@ -158,12 +158,12 @@ def setup_logging(
             console_handler.setFormatter(BrixFormatter())
         _logger.addHandler(console_handler)
 
-        # File handler (JSON by default for files)
+        # File handler (JSON by default for machine parsing, unless explicitly disabled)
         if effective_path:
             file_handler = logging.FileHandler(effective_path)
-            # JSON is default for file output
-            if effective_json or not config.log_json:
-                # Use JSON unless explicitly disabled via env var
+            # Use JSON for files unless json_format was explicitly set to False
+            use_json_for_file = json_format is not False
+            if use_json_for_file:
                 file_handler.setFormatter(BrixJsonFormatter())
             else:
                 file_handler.setFormatter(BrixFormatter())

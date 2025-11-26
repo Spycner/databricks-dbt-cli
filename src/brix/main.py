@@ -10,7 +10,10 @@ from brix.commands.dbt import app as dbt_app
 from brix.utils.logging import setup_logging
 from brix.version_check import check_for_updates
 
-app = typer.Typer(help="Brix CLI - an exploration for Databricks.")
+app = typer.Typer(
+    help="Brix CLI - an exploration for Databricks.",
+    context_settings={"help_option_names": ["-h", "--help"]},
+)
 app.add_typer(dbt_app, name="dbt")
 
 
@@ -42,7 +45,8 @@ def main(
     ] = None,
 ) -> None:
     """Brix CLI entry point."""
-    # Initialize logging (CLI args override env vars)
+    # Initialize logging first - must happen before check_for_updates() so the
+    # logger singleton is configured with CLI overrides before version_check uses it
     setup_logging(level=log_level, log_path=log_path, json_format=log_json)
 
     # Check for updates (silent on failure)

@@ -1,6 +1,6 @@
 """Tests for version_check module."""
 
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from unittest.mock import patch
 
 import httpx
@@ -31,11 +31,11 @@ def temp_cache_dir(tmp_path, monkeypatch):
 
 class TestVersionCache:
     def test_valid_cache(self):
-        cache = VersionCache(last_check=datetime.now(), latest_version="1.0.0")
+        cache = VersionCache(last_check=datetime.now(timezone.utc), latest_version="1.0.0")
         assert cache.latest_version == "1.0.0"
 
     def test_serialization_roundtrip(self):
-        cache = VersionCache(last_check=datetime.now(), latest_version="2.0.0")
+        cache = VersionCache(last_check=datetime.now(timezone.utc), latest_version="2.0.0")
         json_str = cache.model_dump_json()
         loaded = VersionCache.model_validate_json(json_str)
         assert loaded.latest_version == cache.latest_version
@@ -57,7 +57,7 @@ class TestLoadCache:
         assert _load_cache() is None
 
     def test_valid_cache_file(self, temp_cache_dir):
-        cache = VersionCache(last_check=datetime.now(), latest_version="1.0.0")
+        cache = VersionCache(last_check=datetime.now(timezone.utc), latest_version="1.0.0")
         temp_cache_dir.parent.mkdir(parents=True, exist_ok=True)
         temp_cache_dir.write_text(cache.model_dump_json())
         loaded = _load_cache()
@@ -80,16 +80,16 @@ class TestShouldRefresh:
         assert _should_refresh(None) is True
 
     def test_fresh_cache(self):
-        cache = VersionCache(last_check=datetime.now(), latest_version="1.0.0")
+        cache = VersionCache(last_check=datetime.now(timezone.utc), latest_version="1.0.0")
         assert _should_refresh(cache) is False
 
     def test_stale_cache(self):
-        old_time = datetime.now() - CHECK_INTERVAL - timedelta(hours=1)
+        old_time = datetime.now(timezone.utc) - CHECK_INTERVAL - timedelta(hours=1)
         cache = VersionCache(last_check=old_time, latest_version="1.0.0")
         assert _should_refresh(cache) is True
 
     def test_cache_at_boundary(self):
-        boundary_time = datetime.now() - CHECK_INTERVAL + timedelta(minutes=1)
+        boundary_time = datetime.now(timezone.utc) - CHECK_INTERVAL + timedelta(minutes=1)
         cache = VersionCache(last_check=boundary_time, latest_version="1.0.0")
         assert _should_refresh(cache) is False
 
@@ -146,7 +146,7 @@ class TestCheckForUpdates:
 
     def test_update_available(self, temp_cache_dir, monkeypatch):
         monkeypatch.setattr(version_check, "__version__", "1.0.0")
-        cache = VersionCache(last_check=datetime.now(), latest_version="2.0.0")
+        cache = VersionCache(last_check=datetime.now(timezone.utc), latest_version="2.0.0")
         temp_cache_dir.parent.mkdir(parents=True, exist_ok=True)
         temp_cache_dir.write_text(cache.model_dump_json())
         result = check_for_updates()
@@ -154,7 +154,7 @@ class TestCheckForUpdates:
 
     def test_no_update_needed(self, temp_cache_dir, monkeypatch):
         monkeypatch.setattr(version_check, "__version__", "1.0.0")
-        cache = VersionCache(last_check=datetime.now(), latest_version="1.0.0")
+        cache = VersionCache(last_check=datetime.now(timezone.utc), latest_version="1.0.0")
         temp_cache_dir.parent.mkdir(parents=True, exist_ok=True)
         temp_cache_dir.write_text(cache.model_dump_json())
         result = check_for_updates()
@@ -162,7 +162,7 @@ class TestCheckForUpdates:
 
     def test_spawns_background_thread_when_stale(self, temp_cache_dir, monkeypatch):
         monkeypatch.setattr(version_check, "__version__", "1.0.0")
-        old_time = datetime.now() - CHECK_INTERVAL - timedelta(hours=1)
+        old_time = datetime.now(timezone.utc) - CHECK_INTERVAL - timedelta(hours=1)
         cache = VersionCache(last_check=old_time, latest_version="1.0.0")
         temp_cache_dir.parent.mkdir(parents=True, exist_ok=True)
         temp_cache_dir.write_text(cache.model_dump_json())

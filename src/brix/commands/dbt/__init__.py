@@ -37,7 +37,7 @@ app = typer.Typer(
     cls=DbtGroup,
     help="Run dbt commands.",
     invoke_without_command=True,
-    context_settings={"allow_extra_args": True, "ignore_unknown_options": True},
+    context_settings={"allow_extra_args": True, "ignore_unknown_options": True, "help_option_names": ["-h", "--help"]},
 )
 
 

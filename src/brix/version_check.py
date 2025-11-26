@@ -1,7 +1,7 @@
 """Version update checker using GitHub releases."""
 
 import threading
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import httpx
@@ -41,7 +41,7 @@ def _fetch_and_cache_latest() -> None:
         latest = release.tag_name.lstrip("v")
         logger.debug("Latest version from GitHub: %s", latest)
         CACHE_DIR.mkdir(parents=True, exist_ok=True)
-        cache = VersionCache(last_check=datetime.now(), latest_version=latest)
+        cache = VersionCache(last_check=datetime.now(timezone.utc), latest_version=latest)
         CACHE_FILE.write_text(cache.model_dump_json())
         logger.debug("Version cache updated at %s", CACHE_FILE)
     except (httpx.HTTPError, ValidationError, OSError) as e:
@@ -67,7 +67,7 @@ def _should_refresh(cache: VersionCache | None) -> bool:
     """Check if cache is stale and needs refresh."""
     if cache is None:
         return True
-    return datetime.now() - cache.last_check > CHECK_INTERVAL
+    return datetime.now(timezone.utc) - cache.last_check > CHECK_INTERVAL
 
 
 def check_for_updates() -> str | None:
