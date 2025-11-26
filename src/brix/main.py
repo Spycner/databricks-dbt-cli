@@ -6,10 +6,12 @@ from typing import Annotated
 import typer
 
 from brix import __version__
+from brix.commands.dbt import app as dbt_app
 from brix.utils.logging import setup_logging
 from brix.version_check import check_for_updates
 
 app = typer.Typer(help="Brix CLI - an exploration for Databricks.")
+app.add_typer(dbt_app, name="dbt")
 
 
 def version_callback(value: bool) -> None:
