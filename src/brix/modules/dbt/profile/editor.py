@@ -7,8 +7,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from brix.modules.dbt.profile import get_default_profile_path
-from brix.modules.dbt.profile_models import DbtProfiles, DuckDbOutput, ProfileTarget
+from brix.modules.dbt.profile.models import DbtProfiles, DuckDbOutput, ProfileTarget
+from brix.modules.dbt.profile.service import get_default_profile_path
 from brix.utils.logging import get_logger
 
 

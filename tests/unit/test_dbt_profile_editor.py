@@ -4,7 +4,9 @@ import pytest
 from typer.testing import CliRunner
 
 from brix.main import app
-from brix.modules.dbt.profile_editor import (
+from brix.modules.dbt.profile import (
+    DbtProfiles,
+    DuckDbOutput,
     OutputAlreadyExistsError,
     OutputNotFoundError,
     ProfileAlreadyExistsError,
@@ -21,7 +23,6 @@ from brix.modules.dbt.profile_editor import (
     update_output,
     update_profile_target,
 )
-from brix.modules.dbt.profile_models import DbtProfiles, DuckDbOutput
 
 runner = CliRunner()
 

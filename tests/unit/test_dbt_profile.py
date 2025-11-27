@@ -8,12 +8,13 @@ from typer.testing import CliRunner
 
 from brix.main import app
 from brix.modules.dbt.profile import (
+    DbtProfiles,
+    DuckDbOutput,
     ProfileExistsError,
     get_default_profile_path,
     init_profile,
     load_template,
 )
-from brix.modules.dbt.profile_models import DbtProfiles, DuckDbOutput
 
 runner = CliRunner()
 

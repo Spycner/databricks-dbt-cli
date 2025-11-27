@@ -10,7 +10,7 @@ from typing import Literal
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-from brix.modules.dbt.profile_models import DbtProfiles
+from brix.modules.dbt.profile.models import DbtProfiles
 from brix.templates import get_template
 from brix.utils.logging import get_logger
 

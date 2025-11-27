@@ -11,7 +11,7 @@ from typing import Literal
 import questionary
 import typer
 
-from brix.modules.dbt.profile_editor import (
+from brix.modules.dbt.profile.editor import (
     OutputAlreadyExistsError,
     OutputNotFoundError,
     ProfileAlreadyExistsError,
@@ -28,7 +28,7 @@ from brix.modules.dbt.profile_editor import (
     update_output,
     update_profile_target,
 )
-from brix.modules.dbt.profile_models import DbtProfiles, DuckDbOutput
+from brix.modules.dbt.profile.models import DbtProfiles, DuckDbOutput
 
 # Action types for main menu
 MainAction = Literal[
@@ -490,7 +490,7 @@ def run_interactive_edit(profile_path: Path | None = None) -> None:
     Args:
         profile_path: Path to profiles.yml, uses default if None
     """
-    from brix.modules.dbt.profile import get_default_profile_path
+    from brix.modules.dbt.profile.service import get_default_profile_path
 
     target_path = profile_path or get_default_profile_path()
 

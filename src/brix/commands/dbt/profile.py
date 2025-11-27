@@ -5,23 +5,26 @@ from typing import Annotated, Literal
 
 import typer
 
-from brix.modules.dbt.profile import ProfileExistsError, get_default_profile_path, init_profile
-from brix.modules.dbt.profile_editor import (
+from brix.modules.dbt.profile import (
+    DbtProfiles,
+    DuckDbOutput,
     OutputAlreadyExistsError,
     OutputNotFoundError,
     ProfileAlreadyExistsError,
+    ProfileExistsError,
     ProfileNotFoundError,
     add_output,
     add_profile,
     delete_output,
     delete_profile,
+    get_default_profile_path,
+    init_profile,
     load_profiles,
+    run_interactive_edit,
     save_profiles,
     update_output,
     update_profile_target,
 )
-from brix.modules.dbt.profile_models import DbtProfiles, DuckDbOutput
-from brix.modules.dbt.profile_prompts import run_interactive_edit
 
 ActionType = Literal[
     "add-profile",
