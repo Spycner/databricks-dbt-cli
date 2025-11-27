@@ -223,18 +223,14 @@ def create_project_structure(
     created_files.append("dbt_project.yml")
     logger.debug("Created: %s", project_yml_path)
 
-    # Create packages.yml
-    if packages:
+    # Create packages.yml only if packages were specified
+    if packages is not None:
         dbt_packages = DbtPackages(packages=list(packages))
         packages_content = dbt_packages.to_yaml()
-    else:
-        # Use template with examples
-        packages_content = get_template("packages.yml")
-
-    packages_yml_path = project_path / "packages.yml"
-    packages_yml_path.write_text(packages_content)
-    created_files.append("packages.yml")
-    logger.debug("Created: %s", packages_yml_path)
+        packages_yml_path = project_path / "packages.yml"
+        packages_yml_path.write_text(packages_content)
+        created_files.append("packages.yml")
+        logger.debug("Created: %s", packages_yml_path)
 
     # Create .gitignore
     gitignore_content = get_template("dbt_gitignore")

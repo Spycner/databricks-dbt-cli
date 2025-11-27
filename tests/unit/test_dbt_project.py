@@ -242,7 +242,8 @@ class TestInitProject:
         assert result.success
         assert result.project_path == tmp_path / "test_project"
         assert (tmp_path / "test_project" / "dbt_project.yml").exists()
-        assert (tmp_path / "test_project" / "packages.yml").exists()
+        # packages.yml is only created when packages are explicitly specified
+        assert not (tmp_path / "test_project" / "packages.yml").exists()
         assert (tmp_path / "test_project" / ".gitignore").exists()
         assert (tmp_path / "test_project" / "models").is_dir()
         assert (tmp_path / "test_project" / "seeds").is_dir()
