@@ -2,6 +2,24 @@
 
 <!-- version list -->
 
+## v1.3.0 (2025-11-28)
+
+### Chores
+
+- Update GitHub Actions workflows for documentation
+  ([`0a0f61b`](https://github.com/Spycner/brix/commit/0a0f61b810898e95b53cb4352de92e0c8409b663))
+
+### Documentation
+
+- Update log format description in BrixFormatter
+  ([`b986ab8`](https://github.com/Spycner/brix/commit/b986ab8b41a0bf517a8ed175b4dcaea3fc6f1223))
+
+### Features
+
+- Add initial documentation and configuration for Brix CLI
+  ([`fa5438c`](https://github.com/Spycner/brix/commit/fa5438ccf41f17d622d46e0476a621c97d360596))
+
+
 ## v1.2.0 (2025-11-28)
 
 ### Bug Fixes
