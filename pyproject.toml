@@ -27,6 +27,8 @@ docs = [
 
 [project.scripts]
 brix = "brix.main:app"
+sqlfluff-project-lint = "brix.scripts.sqlfluff_hook:lint"
+sqlfluff-project-fix = "brix.scripts.sqlfluff_hook:fix"
 
 [build-system]
 requires = ["hatchling"]
@@ -84,6 +86,7 @@ unfixable = ["B"]
 [tool.ruff.lint.per-file-ignores]
 "__init__.py" = ["E402"]
 "tests/*" = ["S101", "ANN", "D", "S603", "S607"]
+"src/brix/scripts/*" = ["T20", "S603", "S607"]  # CLI scripts need print and subprocess
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"

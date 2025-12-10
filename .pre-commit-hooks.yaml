@@ -1,0 +1,59 @@
+# Pre-commit hooks for SQLFluff with per-project discovery
+#
+# These hooks solve the SQLFluff templater limitation where the `templater`
+# setting cannot be overridden in subdirectory `.sqlfluff` files. They discover
+# all directories containing `.sqlfluff` files and run sqlfluff from each directory.
+#
+# Usage in your .pre-commit-config.yaml:
+#
+#   repos:
+#     - repo: https://github.com/your-org/brix
+#       rev: v1.0.0
+#       hooks:
+#         - id: sqlfluff-lint
+#           additional_dependencies:
+#             - sqlfluff>=3.5.0
+#             - sqlfluff-templater-dbt>=3.5.0
+#             - dbt-databricks>=1.8.0
+
+# Standard hooks - discover all .sqlfluff directories
+- id: sqlfluff-lint
+  name: SQLFluff Lint (discover all projects)
+  description: Discover all .sqlfluff directories and run lint in each
+  entry: sqlfluff-project-lint
+  language: python
+  types: [sql]
+  require_serial: true
+  pass_filenames: false
+  always_run: true
+
+- id: sqlfluff-fix
+  name: SQLFluff Fix (discover all projects)
+  description: Discover all .sqlfluff directories and run fix in each
+  entry: sqlfluff-project-fix
+  language: python
+  types: [sql]
+  require_serial: true
+  pass_filenames: false
+  always_run: true
+
+# dbt-specific hooks - require both .sqlfluff AND dbt_project.yml
+- id: sqlfluff-dbt-lint
+  name: SQLFluff Lint (dbt projects only)
+  description: Discover directories with .sqlfluff + dbt_project.yml and lint
+  entry: sqlfluff-project-lint --require-dbt
+  language: python
+  types: [sql]
+  require_serial: true
+  pass_filenames: false
+  always_run: true
+
+- id: sqlfluff-dbt-fix
+  name: SQLFluff Fix (dbt projects only)
+  description: Discover directories with .sqlfluff + dbt_project.yml and fix
+  entry: sqlfluff-project-fix --require-dbt
+  language: python
+  types: [sql]
+  require_serial: true
+  pass_filenames: false
+  always_run: true

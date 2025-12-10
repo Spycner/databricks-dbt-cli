@@ -65,7 +65,9 @@ default:
         # Parse it again to verify roundtrip
         profiles2 = DbtProfiles.from_yaml(output_yaml)
         assert profiles2["default"].target == "dev"
-        assert profiles2["default"].outputs["dev"].path == "test.duckdb"
+        output = profiles2["default"].outputs["dev"]
+        assert isinstance(output, DuckDbOutput)
+        assert output.path == "test.duckdb"
 
     def test_parse_duckdb_profile_with_all_options(self):
         """Test DuckDB profile with schema, database, extensions, and settings."""

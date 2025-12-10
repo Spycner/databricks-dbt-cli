@@ -37,6 +37,19 @@ WITH catalog_reference_example AS (
 
 ),
 
+order_counts AS (
+
+    /*
+        Extracted subquery to CTE to satisfy ST05 rule.
+    */
+    SELECT
+        customer_id,
+        COUNT(*) AS order_count
+    FROM {{ ref('fct_orders') }}
+    GROUP BY customer_id
+
+),
+
 cross_schema_pattern AS (
 
     /*
@@ -49,13 +62,7 @@ cross_schema_pattern AS (
         c.customer_tier,
         o.order_count
     FROM catalog_reference_example AS c
-    LEFT JOIN (
-        SELECT
-            customer_id,
-            COUNT(*) AS order_count
-        FROM {{ ref('fct_orders') }}
-        GROUP BY customer_id
-    ) AS o
+    LEFT JOIN order_counts AS o
         ON c.customer_id = o.customer_id
 
 ),
