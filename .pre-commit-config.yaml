@@ -15,6 +15,24 @@ repos:
         types: [python]
         pass_filenames: false
 
+      - id: sqlfluff-dbt-lint
+        name: SQLFluff Lint (dbt projects)
+        entry: uv run sqlfluff-project-lint --require-dbt
+        language: system
+        types: [sql]
+        require_serial: true
+        pass_filenames: false
+        always_run: true
+
+      - id: sqlfluff-dbt-fix
+        name: SQLFluff Fix (dbt projects)
+        entry: uv run sqlfluff-project-fix --require-dbt
+        language: system
+        types: [sql]
+        require_serial: true
+        pass_filenames: false
+        always_run: true
+
   - repo: https://github.com/compilerla/conventional-pre-commit
     rev: v3.4.0
     hooks:
