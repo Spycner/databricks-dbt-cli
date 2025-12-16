@@ -2,6 +2,14 @@
 
 <!-- version list -->
 
+## v1.6.0 (2025-12-16)
+
+### Features
+
+- Cleanup mock profiles created in pre-commit
+  ([`86134f5`](https://github.com/Spycner/brix/commit/86134f52c3f4bc93c2910fe65791299216227236))
+
+
 ## v1.5.0 (2025-12-16)
 
 ### Chores
