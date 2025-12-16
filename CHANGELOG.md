@@ -2,6 +2,19 @@
 
 <!-- version list -->
 
+## v1.5.0 (2025-12-16)
+
+### Chores
+
+- Update brix package version to 1.4.0 and enhance sqlfluff PowerShell script
+  ([`cb58eb8`](https://github.com/Spycner/brix/commit/cb58eb854e1e120765ca0fde3053a71cab71ff4c))
+
+### Features
+
+- Ensure mock dbt-profile during test when none exists
+  ([`3716b3a`](https://github.com/Spycner/brix/commit/3716b3a94b357a767b38f4daf4029b9ac321562f))
+
+
 ## v1.4.0 (2025-12-11)
 
 ### Chores
