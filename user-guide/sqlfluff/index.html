@@ -1,0 +1,2267 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="CLI for dbt project and profile management">
+      
+      
+      
+        <link rel="canonical" href="https://spycner.github.io/brix/user-guide/sqlfluff/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>SQLFluff Setup Guide for dbt with Databricks - Brix</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#sqlfluff-setup-guide-for-dbt-with-databricks" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Brix" class="md-header__button md-logo" aria-label="Brix" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Brix
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              SQLFluff Setup Guide for dbt with Databricks
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="amber"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="deep-purple" data-md-color-accent="amber"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/Spycner/brix" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Spycner/brix
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Brix" class="md-nav__button md-logo" aria-label="Brix" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Brix
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/Spycner/brix" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Spycner/brix
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Getting Started
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quick Start
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    User Guide
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    User Guide
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../commands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Commands Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../profiles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Profile Management
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../projects/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Project Management
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../passthrough/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    dbt Passthrough
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Developer Guide
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Developer Guide
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developer-guide/architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developer-guide/contributing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contributing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developer-guide/adding-adapters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adding Adapters
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developer-guide/testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Testing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/modules/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Modules
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#table-of-contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table of Contents
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#key-benefits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Benefits
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Installation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Installation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#required-packages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Required Packages
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#package-descriptions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Package Descriptions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#file-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File Structure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sqlfluff-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        .sqlfluff Configuration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#configuration-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration Options
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dialect-choice-databricks-vs-sparksql" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dialect Choice: databricks vs sparksql
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sqlfluffignore" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        .sqlfluffignore
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rule-categories" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rule Categories
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Rule Categories">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#layout-rules-lt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Layout Rules (LT)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#capitalisation-rules-cp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Capitalisation Rules (CP)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aliasing-rules-al" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Aliasing Rules (AL)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ambiguous-rules-am" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ambiguous Rules (AM)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#structure-rules-st" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Structure Rules (ST)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#convention-rules-cv" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Convention Rules (CV)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#references-rules-rf" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        References Rules (RF)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recommended-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recommended Configuration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Recommended Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#complete-sqlfluff-for-databricks-dbt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Complete .sqlfluff for Databricks + dbt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dbt-labs-style-guide-alternative" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        dbt Labs Style Guide Alternative
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#local-profilesyml-for-linting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Local profiles.yml for Linting
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cicd-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CI/CD Integration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="CI/CD Integration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pre-commit-hook" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pre-commit Hook
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#github-actions-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GitHub Actions Workflow
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#github-pr-annotations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GitHub PR Annotations
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#multi-project-monorepo-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Multi-Project / Monorepo Setup
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Multi-Project / Monorepo Setup">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-templater-limitation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Templater Limitation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-can-be-inherited" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What CAN Be Inherited
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recommended-approach-per-project-execution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recommended Approach: Per-Project Execution
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Recommended Approach: Per-Project Execution">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cli-usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CLI Usage
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#github-actions-for-multiple-projects" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GitHub Actions for Multiple Projects
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pre-commit-for-multiple-projects" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pre-commit for Multiple Projects
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#alternative-jinja-templater-with-dbt-builtins" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Alternative: Jinja Templater with dbt Builtins
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vs-code-configuration-for-multi-project" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VS Code Configuration for Multi-Project
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#environment-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Environment Variables
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Troubleshooting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#common-errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Errors
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Common Errors">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-could-not-find-profile-named-xxx" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. "Could not find profile named 'XXX'"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-adapter-is-undefined" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. "'adapter' is undefined"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-database-connection-errors-in-ci" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Database Connection Errors in CI
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-slow-performance-with-dbt-templater" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Slow Performance with dbt Templater
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-macro-linting-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Macro Linting Issues
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#debugging-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Debugging Commands
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#templater-comparison" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Templater Comparison
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sources
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Sources">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#official-documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Official Documentation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#github-resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GitHub Resources
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dbt-resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        dbt Resources
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#community-troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Community &amp; Troubleshooting
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="sqlfluff-setup-guide-for-dbt-with-databricks">SQLFluff Setup Guide for dbt with Databricks<a class="headerlink" href="#sqlfluff-setup-guide-for-dbt-with-databricks" title="Permanent link">&para;</a></h1>
+<p>A comprehensive guide to configuring SQLFluff for linting and formatting SQL in dbt projects targeting Databricks.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents<a class="headerlink" href="#table-of-contents" title="Permanent link">&para;</a></h2>
+<ol>
+<li><a href="#overview">Overview</a></li>
+<li><a href="#installation">Installation</a></li>
+<li><a href="#configuration">Configuration</a></li>
+<li><a href="#rule-categories">Rule Categories</a></li>
+<li><a href="#recommended-configuration">Recommended Configuration</a></li>
+<li><a href="#cicd-integration">CI/CD Integration</a></li>
+<li><a href="#multi-project--monorepo-setup">Multi-Project / Monorepo Setup</a></li>
+<li><a href="#troubleshooting">Troubleshooting</a></li>
+<li><a href="#sources">Sources</a></li>
+</ol>
+<hr />
+<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
+<p><a href="https://github.com/sqlfluff/sqlfluff">SQLFluff</a> is a modular SQL linter and auto-formatter with support for multiple dialects and templated code. When combined with dbt, it provides powerful capabilities for enforcing SQL standards across your analytics codebase.</p>
+<h3 id="key-benefits">Key Benefits<a class="headerlink" href="#key-benefits" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Dialect-aware</strong>: Native support for Databricks SQL syntax via the <code>databricks</code> dialect</li>
+<li><strong>dbt Integration</strong>: Understands Jinja templating and dbt macros like <code>ref()</code>, <code>source()</code>, and <code>var()</code></li>
+<li><strong>Auto-fix</strong>: Can automatically fix many rule violations</li>
+<li><strong>Extensible</strong>: Granular rule configuration for team-specific standards</li>
+</ul>
+<hr />
+<h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h2>
+<h3 id="required-packages">Required Packages<a class="headerlink" href="#required-packages" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>pip<span class="w"> </span>install<span class="w"> </span>sqlfluff<span class="w"> </span>sqlfluff-templater-dbt<span class="w"> </span>dbt-databricks
+</code></pre></div>
+<p>Or with uv:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>uv<span class="w"> </span>add<span class="w"> </span>sqlfluff<span class="w"> </span>sqlfluff-templater-dbt<span class="w"> </span>dbt-databricks
+</code></pre></div>
+<h3 id="package-descriptions">Package Descriptions<a class="headerlink" href="#package-descriptions" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Package</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sqlfluff</code></td>
+<td>Core linter and formatter</td>
+</tr>
+<tr>
+<td><code>sqlfluff-templater-dbt</code></td>
+<td>dbt templater for parsing Jinja/dbt syntax</td>
+</tr>
+<tr>
+<td><code>dbt-databricks</code></td>
+<td>dbt adapter for Databricks (required by templater)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h2>
+<h3 id="file-structure">File Structure<a class="headerlink" href="#file-structure" title="Permanent link">&para;</a></h3>
+<p>SQLFluff uses two configuration files in your project root:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>your-dbt-project/
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>├── .sqlfluff           # Main configuration
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>├── .sqlfluffignore     # Files/directories to ignore
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>├── dbt_project.yml
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>├── profiles.yml        # Local profiles for linting
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>└── models/
+</code></pre></div>
+<h3 id="sqlfluff-configuration">.sqlfluff Configuration<a class="headerlink" href="#sqlfluff-configuration" title="Permanent link">&para;</a></h3>
+<p>Create a <code>.sqlfluff</code> file in your dbt project root:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">[sqlfluff]</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="na">dialect</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">databricks</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="na">templater</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">dbt</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="na">max_line_length</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">120</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="na">encoding</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">utf-8</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="k">[sqlfluff:templater:dbt]</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="na">project_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">./</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="na">profiles_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">~/.dbt/</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="na">profile</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">default</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="na">target</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">dev</span>
+</code></pre></div>
+<h3 id="configuration-options">Configuration Options<a class="headerlink" href="#configuration-options" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>dialect</code></td>
+<td>SQL dialect (<code>databricks</code> or <code>sparksql</code>)</td>
+<td>Required</td>
+</tr>
+<tr>
+<td><code>templater</code></td>
+<td>Template engine (<code>dbt</code> or <code>jinja</code>)</td>
+<td><code>jinja</code></td>
+</tr>
+<tr>
+<td><code>max_line_length</code></td>
+<td>Maximum characters per line</td>
+<td>80</td>
+</tr>
+<tr>
+<td><code>project_dir</code></td>
+<td>Path to dbt_project.yml</td>
+<td><code>./</code></td>
+</tr>
+<tr>
+<td><code>profiles_dir</code></td>
+<td>Path to profiles.yml directory</td>
+<td><code>~/.dbt/</code></td>
+</tr>
+<tr>
+<td><code>profile</code></td>
+<td>dbt profile name</td>
+<td>Required</td>
+</tr>
+<tr>
+<td><code>target</code></td>
+<td>dbt target within profile</td>
+<td>Required</td>
+</tr>
+</tbody>
+</table>
+<h3 id="dialect-choice-databricks-vs-sparksql">Dialect Choice: <code>databricks</code> vs <code>sparksql</code><a class="headerlink" href="#dialect-choice-databricks-vs-sparksql" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong><code>databricks</code></strong>: Recommended for Databricks. Inherits from <code>sparksql</code> and adds Unity Catalog syntax support.</li>
+<li><strong><code>sparksql</code></strong>: Use for generic Apache Spark SQL without Databricks-specific features.</li>
+</ul>
+<h3 id="sqlfluffignore">.sqlfluffignore<a class="headerlink" href="#sqlfluffignore" title="Permanent link">&para;</a></h3>
+<p>Create a <code>.sqlfluffignore</code> file to exclude directories:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>target/
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>dbt_packages/
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>dbt_modules/
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>macros/
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>logs/
+</code></pre></div>
+<hr />
+<h2 id="rule-categories">Rule Categories<a class="headerlink" href="#rule-categories" title="Permanent link">&para;</a></h2>
+<p>SQLFluff organizes rules into categories with two-letter prefixes:</p>
+<h3 id="layout-rules-lt">Layout Rules (LT)<a class="headerlink" href="#layout-rules-lt" title="Permanent link">&para;</a></h3>
+<p>Spacing, indentation, and formatting.
+- <code>LT01</code>: Trailing whitespace
+- <code>LT02</code>: Incorrect indentation
+- <code>LT05</code>: Comma placement
+- <code>LT12</code>: End of file newline</p>
+<h3 id="capitalisation-rules-cp">Capitalisation Rules (CP)<a class="headerlink" href="#capitalisation-rules-cp" title="Permanent link">&para;</a></h3>
+<p>Case consistency for SQL elements.
+- <code>CP01</code>: Keywords (SELECT, FROM, WHERE)
+- <code>CP02</code>: Identifiers (table/column names)
+- <code>CP03</code>: Functions
+- <code>CP04</code>: Literals (TRUE, FALSE, NULL)</p>
+<h3 id="aliasing-rules-al">Aliasing Rules (AL)<a class="headerlink" href="#aliasing-rules-al" title="Permanent link">&para;</a></h3>
+<p>Alias best practices.
+- <code>AL01</code>: Implicit aliasing (missing AS keyword)
+- <code>AL02</code>: Table aliases in column references
+- <code>AL07</code>: Avoid aliases entirely (disabled by default)</p>
+<h3 id="ambiguous-rules-am">Ambiguous Rules (AM)<a class="headerlink" href="#ambiguous-rules-am" title="Permanent link">&para;</a></h3>
+<p>Query clarity.
+- <code>AM01</code>: Distinct used with GROUP BY
+- <code>AM04</code>: Nested CASE statements
+- <code>AM05</code>: Join condition qualification</p>
+<h3 id="structure-rules-st">Structure Rules (ST)<a class="headerlink" href="#structure-rules-st" title="Permanent link">&para;</a></h3>
+<p>Query logic.
+- <code>ST05</code>: CTE usage instead of subqueries
+- <code>ST06</code>: Select targets ordering
+- <code>ST07</code>: Using USING clause in joins</p>
+<h3 id="convention-rules-cv">Convention Rules (CV)<a class="headerlink" href="#convention-rules-cv" title="Permanent link">&para;</a></h3>
+<p>Code style preferences.
+- <code>CV06</code>: Statement terminators (semicolons)
+- <code>CV09</code>: Blocked words
+- <code>CV11</code>: Casting style (CAST vs ::)</p>
+<h3 id="references-rules-rf">References Rules (RF)<a class="headerlink" href="#references-rules-rf" title="Permanent link">&para;</a></h3>
+<p>Column/table qualification.
+- <code>RF01</code>: Quoted identifier consistency
+- <code>RF02</code>: Column qualification in multi-table queries</p>
+<hr />
+<h2 id="recommended-configuration">Recommended Configuration<a class="headerlink" href="#recommended-configuration" title="Permanent link">&para;</a></h2>
+<h3 id="complete-sqlfluff-for-databricks-dbt">Complete .sqlfluff for Databricks + dbt<a class="headerlink" href="#complete-sqlfluff-for-databricks-dbt" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">[sqlfluff]</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="na">dialect</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">databricks</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="na">templater</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">dbt</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="na">max_line_length</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">120</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="na">exclude_rules</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">LT05, AM04, ST06</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="na">warnings</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">RF02</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="na">encoding</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">utf-8</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="na">large_file_skip_byte_limit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">1000000</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="na">processes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">2</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="k">[sqlfluff:indentation]</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="na">indent_unit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">space</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="na">tab_space_size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">4</span>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="na">indented_joins</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">false</span>
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="na">indented_ctes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">false</span>
+<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="na">indented_using_on</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">true</span>
+<a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a><span class="na">indented_on_contents</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">true</span>
+<a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a>
+<a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a><span class="k">[sqlfluff:layout:type:comma]</span>
+<a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a><span class="na">line_position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">trailing</span>
+<a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a>
+<a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a><span class="k">[sqlfluff:templater:dbt]</span>
+<a id="__codelineno-5-23" name="__codelineno-5-23" href="#__codelineno-5-23"></a><span class="na">project_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">./</span>
+<a id="__codelineno-5-24" name="__codelineno-5-24" href="#__codelineno-5-24"></a><span class="na">profiles_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">./</span>
+<a id="__codelineno-5-25" name="__codelineno-5-25" href="#__codelineno-5-25"></a><span class="na">profile</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">default</span>
+<a id="__codelineno-5-26" name="__codelineno-5-26" href="#__codelineno-5-26"></a><span class="na">target</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">dev</span>
+<a id="__codelineno-5-27" name="__codelineno-5-27" href="#__codelineno-5-27"></a>
+<a id="__codelineno-5-28" name="__codelineno-5-28" href="#__codelineno-5-28"></a><span class="k">[sqlfluff:rules:capitalisation.keywords]</span>
+<a id="__codelineno-5-29" name="__codelineno-5-29" href="#__codelineno-5-29"></a><span class="na">capitalisation_policy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">upper</span>
+<a id="__codelineno-5-30" name="__codelineno-5-30" href="#__codelineno-5-30"></a>
+<a id="__codelineno-5-31" name="__codelineno-5-31" href="#__codelineno-5-31"></a><span class="k">[sqlfluff:rules:capitalisation.identifiers]</span>
+<a id="__codelineno-5-32" name="__codelineno-5-32" href="#__codelineno-5-32"></a><span class="na">capitalisation_policy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">lower</span>
+<a id="__codelineno-5-33" name="__codelineno-5-33" href="#__codelineno-5-33"></a>
+<a id="__codelineno-5-34" name="__codelineno-5-34" href="#__codelineno-5-34"></a><span class="k">[sqlfluff:rules:capitalisation.functions]</span>
+<a id="__codelineno-5-35" name="__codelineno-5-35" href="#__codelineno-5-35"></a><span class="na">capitalisation_policy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">upper</span>
+<a id="__codelineno-5-36" name="__codelineno-5-36" href="#__codelineno-5-36"></a>
+<a id="__codelineno-5-37" name="__codelineno-5-37" href="#__codelineno-5-37"></a><span class="k">[sqlfluff:rules:capitalisation.literals]</span>
+<a id="__codelineno-5-38" name="__codelineno-5-38" href="#__codelineno-5-38"></a><span class="na">capitalisation_policy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">upper</span>
+<a id="__codelineno-5-39" name="__codelineno-5-39" href="#__codelineno-5-39"></a>
+<a id="__codelineno-5-40" name="__codelineno-5-40" href="#__codelineno-5-40"></a><span class="k">[sqlfluff:rules:capitalisation.types]</span>
+<a id="__codelineno-5-41" name="__codelineno-5-41" href="#__codelineno-5-41"></a><span class="na">capitalisation_policy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">upper</span>
+<a id="__codelineno-5-42" name="__codelineno-5-42" href="#__codelineno-5-42"></a>
+<a id="__codelineno-5-43" name="__codelineno-5-43" href="#__codelineno-5-43"></a><span class="k">[sqlfluff:rules:aliasing.table]</span>
+<a id="__codelineno-5-44" name="__codelineno-5-44" href="#__codelineno-5-44"></a><span class="na">aliasing</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">explicit</span>
+<a id="__codelineno-5-45" name="__codelineno-5-45" href="#__codelineno-5-45"></a>
+<a id="__codelineno-5-46" name="__codelineno-5-46" href="#__codelineno-5-46"></a><span class="k">[sqlfluff:rules:aliasing.column]</span>
+<a id="__codelineno-5-47" name="__codelineno-5-47" href="#__codelineno-5-47"></a><span class="na">aliasing</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">explicit</span>
+<a id="__codelineno-5-48" name="__codelineno-5-48" href="#__codelineno-5-48"></a>
+<a id="__codelineno-5-49" name="__codelineno-5-49" href="#__codelineno-5-49"></a><span class="k">[sqlfluff:rules:aliasing.expression]</span>
+<a id="__codelineno-5-50" name="__codelineno-5-50" href="#__codelineno-5-50"></a><span class="na">allow_scalar</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">false</span>
+<a id="__codelineno-5-51" name="__codelineno-5-51" href="#__codelineno-5-51"></a>
+<a id="__codelineno-5-52" name="__codelineno-5-52" href="#__codelineno-5-52"></a><span class="k">[sqlfluff:rules:convention.casting_style]</span>
+<a id="__codelineno-5-53" name="__codelineno-5-53" href="#__codelineno-5-53"></a><span class="na">preferred_type_casting_style</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">cast</span>
+</code></pre></div>
+<h3 id="dbt-labs-style-guide-alternative">dbt Labs Style Guide Alternative<a class="headerlink" href="#dbt-labs-style-guide-alternative" title="Permanent link">&para;</a></h3>
+<p>For lowercase keywords (per <a href="https://docs.getdbt.com/best-practices/how-we-style/2-how-we-style-our-sql">dbt style guide</a>):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">[sqlfluff:rules:capitalisation.keywords]</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="na">capitalisation_policy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">lower</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="k">[sqlfluff:rules:capitalisation.functions]</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="na">capitalisation_policy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">lower</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="k">[sqlfluff:rules:capitalisation.literals]</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="na">capitalisation_policy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">lower</span>
+</code></pre></div>
+<h3 id="local-profilesyml-for-linting">Local profiles.yml for Linting<a class="headerlink" href="#local-profilesyml-for-linting" title="Permanent link">&para;</a></h3>
+<p>Create a minimal <code>profiles.yml</code> in your project for local/CI linting without requiring database access:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="nt">default</span><span class="p">:</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span><span class="nt">target</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dev</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">  </span><span class="nt">outputs</span><span class="p">:</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">    </span><span class="nt">dev</span><span class="p">:</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">databricks</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">      </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">env_var(&#39;DBT_HOST&#39;,</span><span class="nv"> </span><span class="s">&#39;dummy.cloud.databricks.com&#39;)</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="w">      </span><span class="nt">http_path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">env_var(&#39;DBT_HTTP_PATH&#39;,</span><span class="nv"> </span><span class="s">&#39;/sql/1.0/warehouses/dummy&#39;)</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="w">      </span><span class="nt">token</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">env_var(&#39;DBT_TOKEN&#39;,</span><span class="nv"> </span><span class="s">&#39;dummy&#39;)</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="w">      </span><span class="nt">catalog</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">main</span>
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="w">      </span><span class="nt">schema</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dev</span>
+</code></pre></div>
+<hr />
+<h2 id="cicd-integration">CI/CD Integration<a class="headerlink" href="#cicd-integration" title="Permanent link">&para;</a></h2>
+<h3 id="pre-commit-hook">Pre-commit Hook<a class="headerlink" href="#pre-commit-hook" title="Permanent link">&para;</a></h3>
+<p>Add to <code>.pre-commit-config.yaml</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nt">repos</span><span class="p">:</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">repo</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://github.com/sqlfluff/sqlfluff</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">    </span><span class="nt">rev</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3.2.5</span><span class="w">  </span><span class="c1"># Use latest stable version</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">    </span><span class="nt">hooks</span><span class="p">:</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sqlfluff-lint</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="w">        </span><span class="nt">additional_dependencies</span><span class="p">:</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dbt-databricks&gt;=1.8.0</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sqlfluff-templater-dbt</span>
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="w">        </span><span class="nt">args</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">--dialect</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">databricks</span><span class="p p-Indicator">]</span>
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sqlfluff-fix</span>
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="w">        </span><span class="nt">additional_dependencies</span><span class="p">:</span>
+<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a><span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dbt-databricks&gt;=1.8.0</span>
+<a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a><span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sqlfluff-templater-dbt</span>
+<a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a><span class="w">        </span><span class="nt">args</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">--dialect</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">databricks</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">--force</span><span class="p p-Indicator">]</span>
+</code></pre></div>
+<h3 id="github-actions-workflow">GitHub Actions Workflow<a class="headerlink" href="#github-actions-workflow" title="Permanent link">&para;</a></h3>
+<p>Create <code>.github/workflows/sqlfluff.yml</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SQLFluff Lint</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="nt">on</span><span class="p">:</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">  </span><span class="nt">pull_request</span><span class="p">:</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">    </span><span class="nt">paths</span><span class="p">:</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;models/**/*.sql&#39;</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;.sqlfluff&#39;</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="nt">jobs</span><span class="p">:</span>
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="w">  </span><span class="nt">sqlfluff</span><span class="p">:</span>
+<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a><span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a><span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v4</span>
+<a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a>
+<a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Set up Python</span>
+<a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/setup-python@v5</span>
+<a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a><span class="w">        </span><span class="nt">with</span><span class="p">:</span>
+<a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a><span class="w">          </span><span class="nt">python-version</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;3.11&#39;</span>
+<a id="__codelineno-9-19" name="__codelineno-9-19" href="#__codelineno-9-19"></a>
+<a id="__codelineno-9-20" name="__codelineno-9-20" href="#__codelineno-9-20"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install dependencies</span>
+<a id="__codelineno-9-21" name="__codelineno-9-21" href="#__codelineno-9-21"></a><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<a id="__codelineno-9-22" name="__codelineno-9-22" href="#__codelineno-9-22"></a><span class="w">          </span><span class="no">pip install sqlfluff sqlfluff-templater-dbt dbt-databricks</span>
+<a id="__codelineno-9-23" name="__codelineno-9-23" href="#__codelineno-9-23"></a>
+<a id="__codelineno-9-24" name="__codelineno-9-24" href="#__codelineno-9-24"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create dummy profiles.yml</span>
+<a id="__codelineno-9-25" name="__codelineno-9-25" href="#__codelineno-9-25"></a><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<a id="__codelineno-9-26" name="__codelineno-9-26" href="#__codelineno-9-26"></a><span class="w">          </span><span class="no">cat &gt; profiles.yml &lt;&lt; &#39;EOF&#39;</span>
+<a id="__codelineno-9-27" name="__codelineno-9-27" href="#__codelineno-9-27"></a><span class="w">          </span><span class="no">default:</span>
+<a id="__codelineno-9-28" name="__codelineno-9-28" href="#__codelineno-9-28"></a><span class="w">            </span><span class="no">target: dev</span>
+<a id="__codelineno-9-29" name="__codelineno-9-29" href="#__codelineno-9-29"></a><span class="w">            </span><span class="no">outputs:</span>
+<a id="__codelineno-9-30" name="__codelineno-9-30" href="#__codelineno-9-30"></a><span class="w">              </span><span class="no">dev:</span>
+<a id="__codelineno-9-31" name="__codelineno-9-31" href="#__codelineno-9-31"></a><span class="w">                </span><span class="no">type: databricks</span>
+<a id="__codelineno-9-32" name="__codelineno-9-32" href="#__codelineno-9-32"></a><span class="w">                </span><span class="no">host: dummy.cloud.databricks.com</span>
+<a id="__codelineno-9-33" name="__codelineno-9-33" href="#__codelineno-9-33"></a><span class="w">                </span><span class="no">http_path: /sql/1.0/warehouses/dummy</span>
+<a id="__codelineno-9-34" name="__codelineno-9-34" href="#__codelineno-9-34"></a><span class="w">                </span><span class="no">token: dummy</span>
+<a id="__codelineno-9-35" name="__codelineno-9-35" href="#__codelineno-9-35"></a><span class="w">                </span><span class="no">catalog: main</span>
+<a id="__codelineno-9-36" name="__codelineno-9-36" href="#__codelineno-9-36"></a><span class="w">                </span><span class="no">schema: dev</span>
+<a id="__codelineno-9-37" name="__codelineno-9-37" href="#__codelineno-9-37"></a><span class="w">          </span><span class="no">EOF</span>
+<a id="__codelineno-9-38" name="__codelineno-9-38" href="#__codelineno-9-38"></a>
+<a id="__codelineno-9-39" name="__codelineno-9-39" href="#__codelineno-9-39"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Lint SQL</span>
+<a id="__codelineno-9-40" name="__codelineno-9-40" href="#__codelineno-9-40"></a><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sqlfluff lint models/ --format github-annotation-native</span>
+</code></pre></div>
+<h3 id="github-pr-annotations">GitHub PR Annotations<a class="headerlink" href="#github-pr-annotations" title="Permanent link">&para;</a></h3>
+<p>Use <code>--format github-annotation-native</code> to get inline PR annotations:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>sqlfluff<span class="w"> </span>lint<span class="w"> </span>models/<span class="w"> </span>--format<span class="w"> </span>github-annotation-native
+</code></pre></div>
+<hr />
+<h2 id="multi-project-monorepo-setup">Multi-Project / Monorepo Setup<a class="headerlink" href="#multi-project-monorepo-setup" title="Permanent link">&para;</a></h2>
+<p>When working with multiple dbt projects in a single repository, there's an important limitation to understand.</p>
+<h3 id="the-templater-limitation">The Templater Limitation<a class="headerlink" href="#the-templater-limitation" title="Permanent link">&para;</a></h3>
+<p><strong>The <code>templater</code> setting cannot be overridden in subdirectory <code>.sqlfluff</code> files.</strong> SQLFluff explicitly requires the templater to be set in the root config where SQLFluff is executed:</p>
+<blockquote>
+<p>"To use the dbt templater, you must set <code>templater = dbt</code> in the <code>.sqlfluff</code> config file in the directory where sqlfluff is run."</p>
+</blockquote>
+<p>This means you <strong>cannot</strong> have a structure like:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>repo/
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>├── .sqlfluff                    # templater = jinja (global)
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>└── assets/dbt_projects/
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>    ├── project_a/
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>    │   └── .sqlfluff            # templater = dbt (IGNORED!)
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>    └── project_b/
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>        └── .sqlfluff            # templater = dbt (IGNORED!)
+</code></pre></div>
+<h3 id="what-can-be-inherited">What CAN Be Inherited<a class="headerlink" href="#what-can-be-inherited" title="Permanent link">&para;</a></h3>
+<p>All other settings follow hierarchical inheritance and can be overridden per subdirectory:
+- Rules and rule configurations
+- Indentation settings
+- Capitalisation policies
+- Line length
+- Dialect (though this typically stays consistent)</p>
+<h3 id="recommended-approach-per-project-execution">Recommended Approach: Per-Project Execution<a class="headerlink" href="#recommended-approach-per-project-execution" title="Permanent link">&para;</a></h3>
+<p>The most reliable solution is to run SQLFluff from within each project directory:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>repo/
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>├── .sqlfluff.shared             # Shared rules (not used directly)
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>└── assets/dbt_projects/
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>    ├── project_a/
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>    │   ├── .sqlfluff            # templater = dbt, includes shared rules
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>    │   ├── .sqlfluffignore
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>    │   ├── dbt_project.yml
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>    │   └── models/
+<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a>    └── project_b/
+<a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a>        ├── .sqlfluff            # templater = jinja (different!)
+<a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a>        ├── .sqlfluffignore
+<a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a>        ├── dbt_project.yml
+<a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a>        └── models/
+</code></pre></div>
+<h4 id="cli-usage">CLI Usage<a class="headerlink" href="#cli-usage" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1"># Lint project_a</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="nb">cd</span><span class="w"> </span>assets/dbt_projects/project_a<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>sqlfluff<span class="w"> </span>lint<span class="w"> </span>models/
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="c1"># Lint project_b</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="nb">cd</span><span class="w"> </span>assets/dbt_projects/project_b<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>sqlfluff<span class="w"> </span>lint<span class="w"> </span>models/
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="c1"># Or use absolute paths</span>
+<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a>sqlfluff<span class="w"> </span>lint<span class="w"> </span>assets/dbt_projects/project_a/models/<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a><span class="w">  </span>--config<span class="w"> </span>assets/dbt_projects/project_a/.sqlfluff
+</code></pre></div>
+<h4 id="github-actions-for-multiple-projects">GitHub Actions for Multiple Projects<a class="headerlink" href="#github-actions-for-multiple-projects" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SQLFluff Lint</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="nt">on</span><span class="p">:</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="w">  </span><span class="nt">pull_request</span><span class="p">:</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="w">    </span><span class="nt">paths</span><span class="p">:</span>
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;assets/dbt_projects/**/*.sql&#39;</span>
+<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;assets/dbt_projects/**/.sqlfluff&#39;</span>
+<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a>
+<a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a><span class="nt">jobs</span><span class="p">:</span>
+<a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a><span class="w">  </span><span class="nt">lint</span><span class="p">:</span>
+<a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a><span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a><span class="w">    </span><span class="nt">strategy</span><span class="p">:</span>
+<a id="__codelineno-14-13" name="__codelineno-14-13" href="#__codelineno-14-13"></a><span class="w">      </span><span class="nt">matrix</span><span class="p">:</span>
+<a id="__codelineno-14-14" name="__codelineno-14-14" href="#__codelineno-14-14"></a><span class="w">        </span><span class="nt">project</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">project_a</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">project_b</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">project_c</span><span class="p p-Indicator">]</span>
+<a id="__codelineno-14-15" name="__codelineno-14-15" href="#__codelineno-14-15"></a><span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<a id="__codelineno-14-16" name="__codelineno-14-16" href="#__codelineno-14-16"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v4</span>
+<a id="__codelineno-14-17" name="__codelineno-14-17" href="#__codelineno-14-17"></a>
+<a id="__codelineno-14-18" name="__codelineno-14-18" href="#__codelineno-14-18"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Set up Python</span>
+<a id="__codelineno-14-19" name="__codelineno-14-19" href="#__codelineno-14-19"></a><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/setup-python@v5</span>
+<a id="__codelineno-14-20" name="__codelineno-14-20" href="#__codelineno-14-20"></a><span class="w">        </span><span class="nt">with</span><span class="p">:</span>
+<a id="__codelineno-14-21" name="__codelineno-14-21" href="#__codelineno-14-21"></a><span class="w">          </span><span class="nt">python-version</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;3.11&#39;</span>
+<a id="__codelineno-14-22" name="__codelineno-14-22" href="#__codelineno-14-22"></a>
+<a id="__codelineno-14-23" name="__codelineno-14-23" href="#__codelineno-14-23"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install dependencies</span>
+<a id="__codelineno-14-24" name="__codelineno-14-24" href="#__codelineno-14-24"></a><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pip install sqlfluff sqlfluff-templater-dbt dbt-databricks</span>
+<a id="__codelineno-14-25" name="__codelineno-14-25" href="#__codelineno-14-25"></a>
+<a id="__codelineno-14-26" name="__codelineno-14-26" href="#__codelineno-14-26"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Lint ${{ matrix.project }}</span>
+<a id="__codelineno-14-27" name="__codelineno-14-27" href="#__codelineno-14-27"></a><span class="w">        </span><span class="nt">working-directory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">assets/dbt_projects/${{ matrix.project }}</span>
+<a id="__codelineno-14-28" name="__codelineno-14-28" href="#__codelineno-14-28"></a><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sqlfluff lint models/ --format github-annotation-native</span>
+</code></pre></div>
+<h4 id="pre-commit-for-multiple-projects">Pre-commit for Multiple Projects<a class="headerlink" href="#pre-commit-for-multiple-projects" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="nt">repos</span><span class="p">:</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">repo</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">local</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="w">    </span><span class="nt">hooks</span><span class="p">:</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sqlfluff-lint-project-a</span>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SQLFluff Lint Project A</span>
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="w">        </span><span class="nt">entry</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bash -c &#39;cd assets/dbt_projects/project_a &amp;&amp; sqlfluff lint models/&#39;</span>
+<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="w">        </span><span class="nt">language</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">system</span>
+<a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a><span class="w">        </span><span class="nt">files</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">^assets/dbt_projects/project_a/.*\.sql$</span>
+<a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a><span class="w">        </span><span class="nt">pass_filenames</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a>
+<a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sqlfluff-lint-project-b</span>
+<a id="__codelineno-15-12" name="__codelineno-15-12" href="#__codelineno-15-12"></a><span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SQLFluff Lint Project B</span>
+<a id="__codelineno-15-13" name="__codelineno-15-13" href="#__codelineno-15-13"></a><span class="w">        </span><span class="nt">entry</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bash -c &#39;cd assets/dbt_projects/project_b &amp;&amp; sqlfluff lint models/&#39;</span>
+<a id="__codelineno-15-14" name="__codelineno-15-14" href="#__codelineno-15-14"></a><span class="w">        </span><span class="nt">language</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">system</span>
+<a id="__codelineno-15-15" name="__codelineno-15-15" href="#__codelineno-15-15"></a><span class="w">        </span><span class="nt">files</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">^assets/dbt_projects/project_b/.*\.sql$</span>
+<a id="__codelineno-15-16" name="__codelineno-15-16" href="#__codelineno-15-16"></a><span class="w">        </span><span class="nt">pass_filenames</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+</code></pre></div>
+<h3 id="alternative-jinja-templater-with-dbt-builtins">Alternative: Jinja Templater with dbt Builtins<a class="headerlink" href="#alternative-jinja-templater-with-dbt-builtins" title="Permanent link">&para;</a></h3>
+<p>If per-project execution is too complex, you can use the Jinja templater globally with dbt builtin support:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="k">[sqlfluff]</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="na">dialect</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">databricks</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="na">templater</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">jinja</span>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="na">max_line_length</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">120</span>
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="k">[sqlfluff:templater:jinja]</span>
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="na">apply_dbt_builtins</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">True</span>
+</code></pre></div>
+<p>This provides basic support for dbt macros (<code>ref()</code>, <code>source()</code>, <code>var()</code>, <code>is_incremental()</code>) without requiring the full dbt templater. Trade-offs:</p>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>dbt Templater</th>
+<th>Jinja with Builtins</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Accuracy</td>
+<td>Full dbt compilation</td>
+<td>Basic macro stubs</td>
+</tr>
+<tr>
+<td>Custom macros</td>
+<td>Fully supported</td>
+<td>Not supported</td>
+</tr>
+<tr>
+<td>Database access</td>
+<td>Sometimes required</td>
+<td>Never required</td>
+</tr>
+<tr>
+<td>Speed</td>
+<td>Slower</td>
+<td>Faster</td>
+</tr>
+<tr>
+<td>Multi-project</td>
+<td>Per-project only</td>
+<td>Global config works</td>
+</tr>
+</tbody>
+</table>
+<h3 id="vs-code-configuration-for-multi-project">VS Code Configuration for Multi-Project<a class="headerlink" href="#vs-code-configuration-for-multi-project" title="Permanent link">&para;</a></h3>
+<p>Configure VS Code to use the file's directory for config discovery:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="p">{</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="w">  </span><span class="nt">&quot;sqlfluff.workingDirectory&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;${fileDirname}&quot;</span><span class="p">,</span>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="w">  </span><span class="nt">&quot;sqlfluff.ignoreLocalConfig&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span>
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="p">}</span>
+</code></pre></div>
+<p>This allows VS Code to find the nearest <code>.sqlfluff</code> file when linting.</p>
+<h3 id="environment-variables">Environment Variables<a class="headerlink" href="#environment-variables" title="Permanent link">&para;</a></h3>
+<p>You can use environment variables to dynamically set project paths:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="k">[sqlfluff:templater:dbt]</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="na">project_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">./</span>
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="na">profiles_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">./</span>
+</code></pre></div>
+<p>Override in CI/CD:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">DBT_PROJECT_DIR</span><span class="o">=</span>/path/to/project_a
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">DBT_PROFILES_DIR</span><span class="o">=</span>/path/to/project_a
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>sqlfluff<span class="w"> </span>lint<span class="w"> </span>models/
+</code></pre></div></p>
+<hr />
+<h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
+<h3 id="common-errors">Common Errors<a class="headerlink" href="#common-errors" title="Permanent link">&para;</a></h3>
+<h4 id="1-could-not-find-profile-named-xxx">1. "Could not find profile named 'XXX'"<a class="headerlink" href="#1-could-not-find-profile-named-xxx" title="Permanent link">&para;</a></h4>
+<p><strong>Cause</strong>: SQLFluff cannot locate your dbt profile.</p>
+<p><strong>Solution</strong>: Ensure <code>profiles_dir</code> points to the directory containing <code>profiles.yml</code>:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="k">[sqlfluff:templater:dbt]</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="na">profiles_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">./</span><span class="w">  </span><span class="c1"># or ~/.dbt/</span>
+</code></pre></div></p>
+<h4 id="2-adapter-is-undefined">2. "'adapter' is undefined"<a class="headerlink" href="#2-adapter-is-undefined" title="Permanent link">&para;</a></h4>
+<p><strong>Cause</strong>: Using Jinja templater instead of dbt templater, or missing dbt adapter.</p>
+<p><strong>Solution</strong>:
+1. Set <code>templater = dbt</code> in <code>.sqlfluff</code>
+2. Install the dbt adapter: <code>pip install dbt-databricks</code></p>
+<h4 id="3-database-connection-errors-in-ci">3. Database Connection Errors in CI<a class="headerlink" href="#3-database-connection-errors-in-ci" title="Permanent link">&para;</a></h4>
+<p><strong>Cause</strong>: The dbt templater attempts database connections for compile-time operations.</p>
+<p><strong>Solution</strong>: Create a dummy <code>profiles.yml</code> with placeholder credentials. Many SQLFluff operations don't require actual database access.</p>
+<h4 id="4-slow-performance-with-dbt-templater">4. Slow Performance with dbt Templater<a class="headerlink" href="#4-slow-performance-with-dbt-templater" title="Permanent link">&para;</a></h4>
+<p><strong>Cause</strong>: dbt templater is slower than Jinja templater due to full dbt compilation.</p>
+<p><strong>Solutions</strong>:
+- Use Jinja templater for IDE/git hooks: <code>templater = jinja</code>
+- Use dbt templater for CI where accuracy matters
+- Increase <code>processes</code> setting for parallelism
+- Add <code>large_file_skip_byte_limit</code> to skip very large files</p>
+<h4 id="5-macro-linting-issues">5. Macro Linting Issues<a class="headerlink" href="#5-macro-linting-issues" title="Permanent link">&para;</a></h4>
+<p><strong>Cause</strong>: SQLFluff may not properly lint SQL generated by macros.</p>
+<p><strong>Workaround</strong>: This is a <a href="https://github.com/sqlfluff/sqlfluff/issues/4641">known limitation</a>. Complex macros may require inline ignores:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="c1">-- sqlfluff:disable=all</span>
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="err">{{</span><span class="w"> </span><span class="n">my_complex_macro</span><span class="p">()</span><span class="w"> </span><span class="err">}}</span>
+<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="c1">-- sqlfluff:enable=all</span>
+</code></pre></div></p>
+<h3 id="debugging-commands">Debugging Commands<a class="headerlink" href="#debugging-commands" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="c1"># Parse a file to see how SQLFluff interprets it</span>
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>sqlfluff<span class="w"> </span>parse<span class="w"> </span>models/my_model.sql
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a>
+<a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a><span class="c1"># Lint with verbose output</span>
+<a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a>sqlfluff<span class="w"> </span>lint<span class="w"> </span>models/my_model.sql<span class="w"> </span>-v
+<a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a>
+<a id="__codelineno-22-7" name="__codelineno-22-7" href="#__codelineno-22-7"></a><span class="c1"># Test configuration</span>
+<a id="__codelineno-22-8" name="__codelineno-22-8" href="#__codelineno-22-8"></a>sqlfluff<span class="w"> </span>lint<span class="w"> </span>--dialect<span class="w"> </span>databricks<span class="w"> </span>--templater<span class="w"> </span>dbt<span class="w"> </span>models/my_model.sql
+<a id="__codelineno-22-9" name="__codelineno-22-9" href="#__codelineno-22-9"></a>
+<a id="__codelineno-22-10" name="__codelineno-22-10" href="#__codelineno-22-10"></a><span class="c1"># Fix issues automatically</span>
+<a id="__codelineno-22-11" name="__codelineno-22-11" href="#__codelineno-22-11"></a>sqlfluff<span class="w"> </span>fix<span class="w"> </span>models/my_model.sql
+</code></pre></div>
+<h3 id="templater-comparison">Templater Comparison<a class="headerlink" href="#templater-comparison" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>dbt Templater</th>
+<th>Jinja Templater</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Speed</td>
+<td>Slower</td>
+<td>Faster</td>
+</tr>
+<tr>
+<td>Accuracy</td>
+<td>Higher (full dbt context)</td>
+<td>Lower</td>
+</tr>
+<tr>
+<td>Database needed</td>
+<td>Sometimes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Macro support</td>
+<td>Full</td>
+<td>Limited</td>
+</tr>
+<tr>
+<td>Best for</td>
+<td>CI/CD</td>
+<td>IDE, git hooks</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="sources">Sources<a class="headerlink" href="#sources" title="Permanent link">&para;</a></h2>
+<h3 id="official-documentation">Official Documentation<a class="headerlink" href="#official-documentation" title="Permanent link">&para;</a></h3>
+<ul>
+<li><a href="https://docs.sqlfluff.com/en/stable/">SQLFluff Documentation</a></li>
+<li><a href="https://docs.sqlfluff.com/en/stable/configuration/templating/dbt.html">dbt Templater Configuration</a></li>
+<li><a href="https://docs.sqlfluff.com/en/stable/reference/rules.html">SQLFluff Rules Reference</a></li>
+<li><a href="https://docs.sqlfluff.com/en/latest/production/pre_commit.html">SQLFluff Pre-commit Setup</a></li>
+</ul>
+<h3 id="github-resources">GitHub Resources<a class="headerlink" href="#github-resources" title="Permanent link">&para;</a></h3>
+<ul>
+<li><a href="https://github.com/sqlfluff/sqlfluff">SQLFluff GitHub Repository</a></li>
+<li><a href="https://github.com/sqlfluff/sqlfluff-github-actions">SQLFluff GitHub Actions</a></li>
+<li><a href="https://pypi.org/project/sqlfluff-templater-dbt/">sqlfluff-templater-dbt on PyPI</a></li>
+</ul>
+<h3 id="dbt-resources">dbt Resources<a class="headerlink" href="#dbt-resources" title="Permanent link">&para;</a></h3>
+<ul>
+<li><a href="https://docs.getdbt.com/best-practices/how-we-style/2-how-we-style-our-sql">dbt SQL Style Guide</a></li>
+<li><a href="https://github.com/dbt-labs/jaffle-shop-template/blob/main/.sqlfluff">dbt Labs Jaffle Shop .sqlfluff</a></li>
+<li><a href="https://www.databricks.com/blog/2022/12/15/best-practices-super-powering-your-dbt-project-databricks.html">Best Practices for dbt on Databricks</a></li>
+</ul>
+<h3 id="community-troubleshooting">Community &amp; Troubleshooting<a class="headerlink" href="#community-troubleshooting" title="Permanent link">&para;</a></h3>
+<ul>
+<li><a href="https://community.dataops.live/guides-47/crisp-understanding-troubleshooting-dbt-profiles-for-sqlfluff-pre-commit-hooks-123">Troubleshooting dbt Profiles for SQLFluff</a></li>
+<li><a href="https://docs.sqlfluff.com/en/stable/guides/troubleshooting/how_to.html">SQLFluff Troubleshooting Guide</a></li>
+<li><a href="https://github.com/sqlfluff/sqlfluff/issues/6006">Databricks Compatibility Issue #6006</a></li>
+<li><a href="https://github.com/sqlfluff/vscode-sqlfluff/issues/83">VS Code Multi-Project Discussion #83</a></li>
+<li><a href="https://docs.sqlfluff.com/en/stable/configuration/setting_configuration.html">SQLFluff Configuration Hierarchy</a></li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "content.code.copy", "content.tabs.link"], "search": "../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+    
+  </body>
+</html>
