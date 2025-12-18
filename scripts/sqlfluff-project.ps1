@@ -108,6 +108,68 @@ function Remove-MockDbtProfiles {
     }
 }
 
+function Test-DbtPackagesNeeded {
+    <#
+    .SYNOPSIS
+        Check if a project needs dbt deps to be run.
+    .OUTPUTS
+        Returns $true if packages.yml exists but dbt_packages/ does not.
+    #>
+    param(
+        [Parameter(Mandatory)]
+        [string]$ProjectDir
+    )
+
+    $packagesPath = Join-Path $ProjectDir 'packages.yml'
+    $dbtPackagesDir = Join-Path $ProjectDir 'dbt_packages'
+
+    if ((Test-Path $packagesPath) -and -not (Test-Path $dbtPackagesDir)) {
+        return $true
+    }
+    return $false
+}
+
+function Invoke-DbtDeps {
+    <#
+    .SYNOPSIS
+        Run dbt deps in a project directory.
+    .OUTPUTS
+        Returns $true if successful, $false otherwise.
+    #>
+    param(
+        [Parameter(Mandatory)]
+        [string]$ProjectDir
+    )
+
+    Write-Host "Installing dbt packages in $ProjectDir..."
+
+    Push-Location $ProjectDir
+    try {
+        if ($script:UseSqlfluffDirect) {
+            # External consumer - use dbt directly
+            $output = & dbt deps 2>&1 | Out-String
+        } else {
+            # Project context - use uv run
+            $output = & uv run dbt deps 2>&1 | Out-String
+        }
+        $result = $LASTEXITCODE
+
+        if ($result -eq 0) {
+            Write-Host "Packages installed successfully"
+            return $true
+        } else {
+            Write-Host "Failed to install packages (exit code: $result)"
+            if ($output.Trim()) {
+                Write-Host $output.Trim()
+            }
+            return $false
+        }
+    }
+    finally {
+        Pop-Location
+    }
+}
+
 function Find-SqlfluffProjects {
     <#
     .SYNOPSIS
@@ -189,6 +251,19 @@ function Invoke-Sqlfluff {
 
     foreach ($projectDir in $projects) {
         Write-Host "`n=== Running sqlfluff $Mode in $projectDir ==="
+
+        # Check and install dbt packages if needed
+        if (Test-DbtPackagesNeeded -ProjectDir $projectDir) {
+            if (-not (Invoke-DbtDeps -ProjectDir $projectDir)) {
+                Write-Host "Skipping $projectDir due to package installation failure"
+                $results += [PSCustomObject]@{
+                    Project  = $projectDir
+                    ExitCode = 1
+                    Output   = "Failed to install dbt packages"
+                }
+                continue
+            }
+        }
 
         # Build sqlfluff command arguments
         $args = @($Mode, '--processes', '0', '--disable-progress-bar')
